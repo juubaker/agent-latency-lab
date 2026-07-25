@@ -26,8 +26,15 @@
   "build": {
     "appId": "com.johnbaker.agentlatencylab",
     "productName": "Agent Latency Lab",
-    "directories": { "output": "release", "buildResources": "build-resources" },
-    "files": ["src/**", "media/**", "!media/.gitkeep"],
+    "directories": {
+      "output": "release",
+      "buildResources": "build-resources"
+    },
+    "files": [
+      "src/**",
+      "media/**",
+      "!media/.gitkeep"
+    ],
     "publish": {
       "provider": "github",
       "owner": "YOUR_GITHUB_USERNAME",
@@ -35,15 +42,36 @@
     },
     "mac": {
       "category": "public.app-category.developer-tools",
-      "target": [{ "target": "dmg", "arch": ["universal"] }],
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "universal"
+          ]
+        }
+      ],
       "icon": "build-resources/icon.icns"
     },
     "win": {
-      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
       "icon": "build-resources/icon.ico"
     },
     "linux": {
-      "target": [{ "target": "AppImage", "arch": ["x64"] }],
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
       "category": "Development",
       "icon": "build-resources/icon.png"
     },
@@ -52,5 +80,8 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true
     }
+  },
+  "allowScripts": {
+    "electron@33.4.11": true
   }
 }
