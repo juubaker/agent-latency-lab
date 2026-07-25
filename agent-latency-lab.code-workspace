@@ -1,0 +1,13 @@
+{
+  "folders": [{ "name": "Agent Latency Lab", "path": "." }],
+  "settings": {
+    "window.title": "Agent Latency Lab — ${activeEditorShort}"
+  },
+  "extensions": {
+    "recommendations": [
+      "esbenp.prettier-vscode",
+      "dsznajder.es7-react-js-snippets",
+      "humao.rest-client"
+    ]
+  }
+}

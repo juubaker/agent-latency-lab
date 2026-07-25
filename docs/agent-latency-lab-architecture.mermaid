@@ -1,0 +1,113 @@
+flowchart TB
+
+    subgraph INSTRUMENTED["Instrumented Application (your code)"]
+        NodeApp["Node / Express agent<br/>(orchestrator + sub-agents)"]
+        PyApp["Python agent / script"]
+    end
+
+    subgraph TRACERS["Tracer Libraries (zero runtime deps)"]
+        direction LR
+        NodeTracer["latency-trace.ts<br/>Tracer · span() · startSpan()<br/>headersFor() propagation"]
+        PyTracer["latency_trace.py<br/>Tracer · span() context manager<br/>thread-safe, overlap-aware"]
+    end
+
+    subgraph MIDDLEWARE["Express Middleware Layer"]
+        direction TB
+        LT["latencyTrace()<br/>attaches req.trace, records on finish"]
+        AUTH["debugAuth()<br/>bearer token / IP allowlist<br/>mounted on /debug/*"]
+        REG[("In-memory registry<br/>ring buffer, last 200 traces<br/>grouped by traceId")]
+        SLO["SLO Watcher<br/>rolling P50/P95/P99 · TTFT · span P95<br/>diagnosis + cooldown"]
+        MERGE["Trace Merger<br/>fork/join-aware @agent stitching"]
+        ACC["Accounting Engine<br/>tokens → cost (Anthropic/Groq pricing)<br/>retrieved+relevant ids → P@k/R@k/MRR"]
+        OTLP["OTLP Exporter<br/>spans → ExportTraceServiceRequest"]
+    end
+
+    subgraph ROUTES["HTTP Endpoints"]
+        direction TB
+        R1["GET /debug/latency<br/>percentiles + cost + RAG rollup"]
+        R2["GET /debug/latency/trace?id=<br/>merged Lab-format trace"]
+        R3["GET /debug/alerts<br/>diagnosis-enriched SLO breaches"]
+        R4["GET /debug/otlp<br/>OTLP JSON for a trace"]
+        R5["POST /debug/trace-report<br/>remote sub-agent collector"]
+    end
+
+    subgraph EXTERNAL["External Systems (optional)"]
+        direction TB
+        WEBHOOK["Alert webhook<br/>(Slack / PagerDuty relay)"]
+        COLLECTOR["OTLP/HTTP Collector<br/>Jaeger · Grafana Tempo · OTel Collector"]
+        REMOTE["Remote sub-agent process<br/>(separate service, traceparent-linked)"]
+    end
+
+    subgraph LAB["Agent Latency Lab (React + Vite)"]
+        direction TB
+        PARSE["Trace Parser<br/>line format · JSON · @agent lanes"]
+        SIMSIM["Simulated Workload Engine<br/>Monte Carlo, 240 runs, seeded RNG"]
+        SIMCUSTOM["Custom-Trace Engine<br/>fork/join layout + what-if transforms"]
+        UI_WATER["Trace Waterfall<br/>swim-lanes, critical-path flags"]
+        UI_HIST["Latency Histogram<br/>P50/P95/P99 vs SLO"]
+        UI_COST["Cost & RAG Panel<br/>cost/request, P@k, R@k, MRR"]
+        UI_ALERT["Live Alert Feed<br/>polls /debug/alerts, loads worst trace"]
+        UI_BUDGET["Budget Table / Agent Breakdown"]
+    end
+
+    subgraph TESTS["Test Suites (verify, not just build)"]
+        direction LR
+        UNIT["Unit tests (vitest)<br/>tracer · propagation · merge · cost ·<br/>RAG math · OTLP shape · auth fn — 41"]
+        INTEG["Integration tests (supertest)<br/>real HTTP against the demo app ·<br/>SLO firing · cross-process propagation — 12"]
+        PYTEST["Python tests (unittest)<br/>tracer parity — 28"]
+    end
+
+    classDef test fill:#181E2E,stroke:#58B97E,color:#E8ECF6
+    class UNIT,INTEG,PYTEST test
+
+    UNIT -. exercises .-> MIDDLEWARE
+    INTEG -. exercises over real HTTP .-> ROUTES
+    INTEG -. binds real ports, drives .-> NodeApp
+    PYTEST -. exercises .-> PyTracer
+
+    NodeApp --> NodeTracer
+    PyApp --> PyTracer
+    NodeTracer --> LT
+    LT --> REG
+    LT --> SLO
+    LT -. traceparent propagation .-> REMOTE
+    REMOTE -- POST trace JSON --> R5
+    R5 --> REG
+    REG --> MERGE
+    REG --> ACC
+    REG --> AUTH
+    AUTH -- allowed --> R1
+    MERGE --> R2
+    AUTH -.-> R2
+    AUTH -.-> R3
+    AUTH -.-> R4
+    SLO -- fires alert --> WEBHOOK
+    SLO --> R3
+    REG --> OTLP
+    OTLP --> R4
+    OTLP -- auto-export --> COLLECTOR
+
+    R1 -. fetch, 5s poll .-> UI_COST
+    R3 -. fetch, 5s poll .-> UI_ALERT
+    PyTracer -. to_lab_text/to_json .-> PARSE
+
+    UI_ALERT -- "load worst trace" --> PARSE
+    PARSE --> SIMSIM
+    PARSE --> SIMCUSTOM
+    SIMSIM --> UI_WATER
+    SIMCUSTOM --> UI_WATER
+    SIMSIM --> UI_HIST
+    SIMCUSTOM --> UI_HIST
+    SIMCUSTOM --> UI_COST
+    SIMCUSTOM --> UI_BUDGET
+    SIMSIM --> UI_BUDGET
+
+    classDef app fill:#1C2336,stroke:#4FC1B0,color:#E8ECF6
+    classDef mid fill:#181E2E,stroke:#F2A65A,color:#E8ECF6
+    classDef ext fill:#181E2E,stroke:#E5646E,stroke-dasharray: 4 3,color:#E8ECF6
+    classDef ui fill:#1C2336,stroke:#7C93F2,color:#E8ECF6
+
+    class NodeApp,PyApp,NodeTracer,PyTracer app
+    class LT,AUTH,REG,SLO,MERGE,ACC,OTLP,R1,R2,R3,R4,R5 mid
+    class WEBHOOK,COLLECTOR,REMOTE ext
+    class PARSE,SIMSIM,SIMCUSTOM,UI_WATER,UI_HIST,UI_COST,UI_ALERT,UI_BUDGET ui

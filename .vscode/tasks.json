@@ -1,0 +1,58 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Dev: Vite (Latency Lab UI)",
+      "type": "npm",
+      "script": "dev",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "group": "dev" }
+    },
+    {
+      "label": "Dev: Demo triage server",
+      "type": "npm",
+      "script": "server",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "group": "dev" }
+    },
+    {
+      "label": "Dev: Both (UI + server)",
+      "dependsOn": ["Dev: Vite (Latency Lab UI)", "Dev: Demo triage server"],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    },
+    {
+      "label": "Build",
+      "type": "npm",
+      "script": "build",
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "Test: Node unit (fast)",
+      "type": "npm",
+      "script": "test:unit",
+      "problemMatcher": []
+    },
+    {
+      "label": "Test: Node integration (supertest, ~60s)",
+      "type": "npm",
+      "script": "test:integration",
+      "problemMatcher": []
+    },
+    {
+      "label": "Test: Python (unittest)",
+      "type": "shell",
+      "command": "python3 -m unittest discover python/tests -v",
+      "problemMatcher": []
+    },
+    {
+      "label": "Typecheck",
+      "type": "npm",
+      "script": "typecheck",
+      "problemMatcher": ["$tsc"]
+    }
+  ]
+}

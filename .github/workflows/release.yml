@@ -1,0 +1,90 @@
+name: Build & Release Desktop App
+
+# Triggers on any tag matching v1.0.0, v1.2.3, etc. Push a tag to cut a
+# release:
+#   git tag v1.0.0 && git push origin v1.0.0
+on:
+  push:
+    tags: ["v*"]
+  # allows a manual run from the Actions tab for a test build without
+  # publishing (useful for verifying the pipeline after changing this file)
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish to GitHub Releases (uncheck for a dry-run build only)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write # required so electron-builder can attach files to the Release
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false # one platform failing shouldn't cancel the others
+      matrix:
+        include:
+          - os: macos-latest
+            build_script: dist:mac
+          - os: windows-latest
+            build_script: dist:win
+          - os: ubuntu-latest
+            build_script: dist:linux
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            desktop/package-lock.json
+
+      # root install — the desktop app's build.sh runs `npm run build` at
+      # repo root to produce the Lab UI before Electron packages it
+      - name: Install root dependencies
+        run: npm install
+
+      - name: Install desktop app dependencies
+        working-directory: desktop
+        run: npm install
+
+      # electron-builder's --publish flag controls whether it uploads to
+      # the GitHub Release (auto-detected from the pushed tag) or just
+      # builds locally into desktop/release/. Tag pushes always publish;
+      # manual runs respect the workflow_dispatch checkbox, defaulting to
+      # a build-only dry run so testing this file can't accidentally
+      # publish a broken release.
+      - name: Build (tag push — publish)
+        if: github.event_name == 'push'
+        working-directory: desktop
+        run: npm run build:ui && npx electron-builder --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # electron-builder picks the correct single target (dmg/nsis/AppImage)
+        # for whichever OS this matrix job is running on, per the mac/win/linux
+        # target config already in desktop/package.json.
+
+      - name: Build (manual run — publish per input)
+        if: github.event_name == 'workflow_dispatch'
+        working-directory: desktop
+        run: npm run build:ui && npx electron-builder --publish ${{ inputs.publish && 'always' || 'never' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # for manual/dry-run builds, upload the artifact so it's downloadable
+      # from the Actions run page even without publishing to a Release
+      - name: Upload build artifact (manual runs only)
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-latency-lab-${{ matrix.os }}
+          path: |
+            desktop/release/*.dmg
+            desktop/release/*.exe
+            desktop/release/*.AppImage
+          if-no-files-found: warn
+          retention-days: 14

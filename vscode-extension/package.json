@@ -1,0 +1,56 @@
+{
+  "name": "agent-latency-lab",
+  "displayName": "Agent Latency Lab",
+  "description": "Analyze AI agent latency, cost, and retrieval quality — trace waterfalls, fork/join critical-path detection, and what-if optimizations, right inside VS Code.",
+  "version": "0.1.0",
+  "publisher": "johnbaker",
+  "icon": "media/icon.png",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Visualization", "Other"],
+  "keywords": ["latency", "observability", "tracing", "AI agents", "performance", "OpenTelemetry"],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "agentLatencyLab.open",
+        "title": "Agent Latency Lab: Open",
+        "icon": "$(pulse)"
+      },
+      {
+        "command": "agentLatencyLab.openWithSelection",
+        "title": "Agent Latency Lab: Analyze Selected Trace"
+      },
+      {
+        "command": "agentLatencyLab.openWithClipboard",
+        "title": "Agent Latency Lab: Analyze Trace from Clipboard"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "agentLatencyLab.openWithSelection",
+          "when": "editorHasSelection",
+          "group": "navigation"
+        }
+      ],
+      "commandPalette": [
+        { "command": "agentLatencyLab.open" },
+        { "command": "agentLatencyLab.openWithSelection", "when": "editorHasSelection" },
+        { "command": "agentLatencyLab.openWithClipboard" }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.6.0",
+    "@vscode/vsce": "^3.2.0"
+  }
+}

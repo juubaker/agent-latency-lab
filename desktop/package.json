@@ -1,0 +1,56 @@
+{
+  "name": "agent-latency-lab-desktop",
+  "displayName": "Agent Latency Lab",
+  "version": "1.0.0",
+  "description": "Standalone desktop app for Agent Latency Lab — simulated workload and paste-your-trace analysis, no server required. All trace data stays on-device.",
+  "main": "src/main.js",
+  "author": "John Baker",
+  "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_GITHUB_USERNAME/agent-latency-lab"
+  },
+  "scripts": {
+    "build:ui": "./build.sh",
+    "start": "npm run build:ui && electron .",
+    "dist:mac": "npm run build:ui && electron-builder --mac",
+    "dist:win": "npm run build:ui && electron-builder --win",
+    "dist:linux": "npm run build:ui && electron-builder --linux",
+    "dist:all": "npm run build:ui && electron-builder --mac --win --linux"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.johnbaker.agentlatencylab",
+    "productName": "Agent Latency Lab",
+    "directories": { "output": "release", "buildResources": "build-resources" },
+    "files": ["src/**", "media/**", "!media/.gitkeep"],
+    "publish": {
+      "provider": "github",
+      "owner": "YOUR_GITHUB_USERNAME",
+      "repo": "agent-latency-lab"
+    },
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": [{ "target": "dmg", "arch": ["universal"] }],
+      "icon": "build-resources/icon.icns"
+    },
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "icon": "build-resources/icon.ico"
+    },
+    "linux": {
+      "target": [{ "target": "AppImage", "arch": ["x64"] }],
+      "category": "Development",
+      "icon": "build-resources/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
+  }
+}

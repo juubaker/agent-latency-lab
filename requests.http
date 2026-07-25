@@ -1,0 +1,23 @@
+### Run an instrumented triage request (server prints a paste-ready trace)
+POST http://localhost:3001/api/triage
+Content-Type: application/json
+
+{ "message": "How do I change my HSA contribution?", "userId": 42 }
+
+### Rolling P50 / P95 / P99 + last trace in Lab + JSON formats
+GET http://localhost:3001/debug/latency
+
+### Multi-agent NexusAgent request (orchestrator → research ∥ compliance → writer)
+POST http://localhost:3001/api/orchestrate
+Content-Type: application/json
+
+{ "request": "Summarize Q2 vendor risk for the audit committee" }
+
+### Merged swim-lane trace for a specific traceId
+GET http://localhost:3001/debug/latency/trace?id=REPLACE_WITH_TRACE_ID
+
+### Recent SLO alerts (diagnosis-enriched, newest first)
+GET http://localhost:3001/debug/alerts
+
+### OTLP JSON for the last trace (curl this straight to an OTLP/HTTP collector)
+GET http://localhost:3001/debug/otlp

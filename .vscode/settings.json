@@ -1,0 +1,8 @@
+{
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.preferences.importModuleSpecifierEnding": "js",
+  "files.exclude": { "node_modules": true, "dist": true },
+  "search.exclude": { "node_modules": true, "dist": true, "package-lock.json": true }
+}

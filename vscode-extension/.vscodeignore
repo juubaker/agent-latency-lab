@@ -1,0 +1,8 @@
+.vscode/**
+src/**
+tsconfig.json
+build.sh
+*.vsix
+.gitignore
+node_modules/**
+!node_modules/**/README.md
