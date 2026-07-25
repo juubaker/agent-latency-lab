@@ -23,14 +23,26 @@ network dependency):
 
 | Platform | File |
 |---|---|
-| macOS | `Agent Latency Lab-*.dmg` |
-| Windows | `Agent Latency Lab Setup *.exe` |
-| Linux | `Agent Latency Lab-*.AppImage` |
+| macOS | `Agent Latency Lab-*.dmg` (built on macOS only — see workflow) |
+| Windows | `Agent Latency Lab Setup *.exe` (built & verified — Wine cross-build) |
+| Linux | `Agent Latency Lab-*.AppImage` (built & verified — AppImage headless launch) |
 
-These are unsigned builds (no Apple Developer ID / code-signing cert), so:
-- **macOS:** right-click the app → **Open** on first launch to bypass the
-  "unidentified developer" Gatekeeper warning.
-- **Windows:** click **More info → Run anyway** on the SmartScreen prompt.
+These are unsigned builds (no Apple Developer ID / code-signing cert). Notes
+on each platform:
+
+- **Windows:** the distributable `.exe` was cross-built in our CI and
+  locally verified via Wine + `wine32`; the produced PE32 NSIS installer
+  launches under Wine and produces a working app. SmartScreen may still
+  warn for unsigned builds — certificate or Trusted Signing removes that.
+- **Linux:** the AppImage was built and verified by launching it headlessly
+  to confirm the React UI mounts and the app's strict CSP blocks any
+  outbound requests as expected.
+- **macOS:** DMG creation and code-signing are macOS-native operations
+  (requires `hdiutil`/`codesign` and an Apple signing identity) and cannot
+  be reliably cross-built off macOS. For automated macOS artifacts, use the
+  repository's GitHub Actions workflow which runs a `macos-latest` runner
+  to produce the signed/unsinged DMG as appropriate: see
+  `.github/workflows/release.yml` (Build & Release Desktop App).
 
 Also available: a [VS Code extension](vscode-extension/) for analyzing
 traces without leaving the editor.
