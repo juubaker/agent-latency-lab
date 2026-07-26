@@ -1,3 +1,16 @@
 node_modules/
+release/
+media/assets/
+media/index.html
+desktop/node_modules/
+desktop/release/
+desktop/media/assets/
+desktop/media/index.html
+desktop/.DS_Store
 dist/
-*.log
+desktop/node_modules/
+desktop/release/
+desktop/media/assets/
+desktop/media/index.html
+desktop/.DS_Store
+dist/
