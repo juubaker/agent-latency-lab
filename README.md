@@ -16,7 +16,7 @@ largest contributor, think in P95s and budgets — not averages.
 ## Download
 
 Prebuilt desktop apps for macOS, Windows, and Linux — no install, no build
-step, runs fully offline (simulated workload + paste-your-trace, zero
+step, runs fully offline (simulated workload + paste-your-trace, no 
 network dependency):
 
 **[→ Latest release](https://github.com/YOUR_GITHUB_USERNAME/agent-latency-lab/releases/latest)**

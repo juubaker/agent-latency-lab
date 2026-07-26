@@ -1,17 +1,12 @@
 # Agent Latency Lab — Desktop App
 
 A standalone Mac/Windows/Linux app for Agent Latency Lab's **simulated
-workload** and **paste your trace** modes — zero backend, zero network
+workload** and **paste your trace** modes — no backend, no network
 dependency, works fully offline. All trace data stays on your machine; the
 app's Content-Security-Policy actively blocks outbound network requests
 (`connect-src 'none'`), so this isn't just a claim — it's enforced.
 
-This ships the *same UI bundle* as the web app and VS Code extension. What's
-intentionally **not** included here: the live SLO alert feed (which needs a
-running `npm run server` instance to poll) and the instrumentation
-middleware/tracers, both of which remain correctly scoped as something you
-run against *your own* agent's server — not something a static desktop shell
-should be reaching out to.
+What's intentionally **not** included here: the live SLO alert feed (which needs a running `npm run server` instance to poll) and the instrumentation middleware/tracers, both of which remain correctly scoped as something you run against *your own* agent's server — not something a static desktop shell should be reaching out to.
 
 ## Run it locally (no packaging)
 
