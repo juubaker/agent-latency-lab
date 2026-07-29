@@ -1,7 +1,7 @@
 {
   "name": "agent-latency-lab-desktop",
   "displayName": "Agent Latency Lab",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Standalone desktop app for Agent Latency Lab — simulated workload and paste-your-trace analysis, no server required. All trace data stays on-device.",
   "main": "src/main.js",
   "author": "John Baker",
