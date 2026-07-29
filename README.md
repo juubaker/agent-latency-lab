@@ -19,13 +19,13 @@ Prebuilt desktop apps for macOS, Windows, and Linux — no install, no build
 step, runs fully offline (simulated workload + paste-your-trace, no 
 network dependency):
 
-**[→ Latest release](https://github.com/juubaker/agent-latency-lab/releases/latest)**
+| Platform | Download | Notes |
+|---|---|---|
+| macOS | [Agent-Latency-Lab-mac-universal.dmg](https://github.com/juubaker/agent-latency-lab/releases/latest/download/Agent-Latency-Lab-mac-universal.dmg) | Universal (Intel + Apple Silicon) |
+| Windows | [Agent-Latency-Lab-win-setup.exe](https://github.com/juubaker/agent-latency-lab/releases/latest/download/Agent-Latency-Lab-win-setup.exe) | NSIS installer, x64 |
+| Linux | [Agent-Latency-Lab-linux.AppImage](https://github.com/juubaker/agent-latency-lab/releases/latest/download/Agent-Latency-Lab-linux.AppImage) | AppImage, x64 |
 
-| Platform | File |
-|---|---|
-| macOS | `Agent Latency Lab-*.dmg` (built on macOS only — see workflow) |
-| Windows | `Agent Latency Lab Setup *.exe` (built & verified — Wine cross-build) |
-| Linux | `Agent Latency Lab-*.AppImage` (built & verified — AppImage headless launch) |
+Or browse **[all releases →](https://github.com/juubaker/agent-latency-lab/releases)**
 
 These are unsigned builds (no Apple Developer ID / code-signing cert). Notes
 on each platform:

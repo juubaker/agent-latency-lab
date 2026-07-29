@@ -50,7 +50,8 @@
           ]
         }
       ],
-      "icon": "build-resources/icon.icns"
+      "icon": "build-resources/icon.icns",
+      "artifactName": "${productName}-mac-universal.${ext}"
     },
     "win": {
       "target": [
@@ -61,7 +62,8 @@
           ]
         }
       ],
-      "icon": "build-resources/icon.ico"
+      "icon": "build-resources/icon.ico",
+      "artifactName": "${productName}-win-setup.${ext}"
     },
     "linux": {
       "target": [
@@ -73,7 +75,8 @@
         }
       ],
       "category": "Development",
-      "icon": "build-resources/icon.png"
+      "icon": "build-resources/icon.png",
+      "artifactName": "${productName}-linux.${ext}"
     },
     "nsis": {
       "oneClick": false,
