@@ -9,10 +9,10 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/YOUR_GITHUB_USERNAME/agent-latency-lab"
+    "url": "https://github.com/juubaker/agent-latency-lab"
   },
   "scripts": {
-    "build:ui": "./build.sh",
+    "build:ui": "bash build.sh",
     "start": "npm run build:ui && electron .",
     "dist:mac": "npm run build:ui && electron-builder --mac",
     "dist:win": "npm run build:ui && electron-builder --win",
@@ -37,7 +37,7 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "YOUR_GITHUB_USERNAME",
+      "owner": "juubaker",
       "repo": "agent-latency-lab"
     },
     "mac": {
