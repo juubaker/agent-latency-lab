@@ -19,7 +19,7 @@ Prebuilt desktop apps for macOS, Windows, and Linux — no install, no build
 step, runs fully offline (simulated workload + paste-your-trace, no 
 network dependency):
 
-**[→ Latest release](https://github.com/YOUR_GITHUB_USERNAME/agent-latency-lab/releases/latest)**
+**[→ Latest release](https://github.com/juubaker/agent-latency-lab/releases/latest)**
 
 | Platform | File |
 |---|---|
